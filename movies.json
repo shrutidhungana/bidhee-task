@@ -10,7 +10,7 @@
     "runtime": 136,
     "synopsis": "A computer hacker learns about the true nature of reality...",
     "cast": ["Keanu Reeves", "Laurence Fishburne"],
-    "posterUrl": "https://link-to-poster.jpg",
+  
     "reviewCount": 5,
     "averageReviewRating": 4.2
   },
@@ -25,7 +25,7 @@
     "runtime": 148,
     "synopsis": "A thief steals corporate secrets through dream-sharing technology...",
     "cast": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"],
-    "posterUrl": "https://link-to-poster.jpg",
+  
     "reviewCount": 6,
     "averageReviewRating": 4.5
   },
@@ -40,7 +40,7 @@
     "runtime": 170,
     "synopsis": "Two friends search for their long-lost companion...",
     "cast": ["Aamir Khan", "R. Madhavan", "Sharman Joshi"],
-    "posterUrl": "https://link-to-poster.jpg",
+    
     "reviewCount": 8,
     "averageReviewRating": 4.5
   },

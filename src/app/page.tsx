@@ -1,65 +1,169 @@
-import Image from "next/image";
+"use client";
+
+import React from "react";
+import Navbar from "@/components/Navbar";
+import SearchBar from "@/components/Searchbar";
+import Sidebar from "@/components/Sidebar";
+import FilterSelect from "@/components/FilterSelect";
+import SortingSelect from "@/components/SortingSelect";
+import Footer from "@/components/Footer";
+import Pagination from "@/components/Pagination";
+import Card from "@/components/CardComponent";
+
+import { useFilterStore } from "@/store/filterStore";
+import { useMovies } from "@/hooks/useMovies";
 
 export default function Home() {
+  const isAdmin = true;
+
+  const page = useFilterStore((state) => state.page);
+  const limit = useFilterStore((state) => state.limit);
+  const search = useFilterStore((state) => state.search);
+  const genre = useFilterStore((state) => state.genre);
+  const language = useFilterStore((state) => state.language);
+  const sortField = useFilterStore((state) => state.sortField);
+  const sortOrder = useFilterStore((state) => state.sortOrder);
+  const setFilter = useFilterStore((state) => state.setFilter);
+
+  // --- Fetch movies ---
+  const { data, isLoading, isError, error } = useMovies({
+    page,
+    limit,
+    search,
+    genre,
+    language,
+    sortField,
+    sortOrder,
+  });
+
+  const genres = [
+    "All",
+    "Action",
+    "Drama",
+    "Comedy",
+    "Sci-Fi",
+    "Horror",
+    "Romance",
+  ];
+  const languages = ["All", "English", "Hindi", "Nepali"];
+  const sortOptions = [
+    { value: "all", label: "All" },
+    { value: "rating", label: "Rating" },
+    { value: "year", label: "Year" },
+    { value: "title", label: "Title" },
+    { value: "reviewCount", label: "Review Count" },
+  ];
+
+  const totalPages = Math.ceil((data?.total || 0) / limit);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="min-h-screen bg-gray-100">
+      <Navbar title="Movie Dashboard">
+        <div className="flex flex-1 justify-center md:justify-center px-2">
+          <SearchBar
+            value={search}
+            onChange={(val) => setFilter("search", val)}
+            placeholder="Search movies..."
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+        {isAdmin && (
+          <button className="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100">
+            Admin Panel
+          </button>
+        )}
+      </Navbar>
+
+      <div className="hidden md:flex pt-6">
+        {/* Sidebar */}
+        <div className="w-64 mt-8">
+          <Sidebar title="Filters">
+            <FilterSelect
+              value={genre}
+              onChange={(val) => setFilter("genre", val)}
+              options={genres.map((g) => ({ value: g, label: g }))}
+              label="Genre"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <FilterSelect
+              value={language}
+              onChange={(val) => setFilter("language", val)}
+              options={languages.map((l) => ({ value: l, label: l }))}
+              label="Language"
+            />
+            <SortingSelect
+              label="Sort by"
+              value={sortField}
+              onChange={(val) => setFilter("sortField", val)}
+              options={sortOptions}
+            />
+          </Sidebar>
         </div>
-      </main>
+
+        {/* Movie Grid */}
+        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
+          {isLoading && <p>Loading movies...</p>}
+          {isError && <p>Error: {error?.message}</p>}
+          {data?.data.map((movie) => (
+            <Card
+              key={movie.id}
+              title={movie.title}
+              subtitle={movie.genre.join(", ")}
+              rating={movie.rating}
+              year={movie.year}
+              onClick={() => console.log("Movie clicked:", movie.id)}
+              buttonText="View Details"
+            />
+          ))}
+        </main>
+      </div>
+
+      {/* Mobile Sidebar & Grid */}
+      <div className="md:hidden px-4 pt-6">
+        <Sidebar title="Filters">
+          <FilterSelect
+            value={genre}
+            onChange={(val) => setFilter("genre", val)}
+            options={genres.map((g) => ({ value: g, label: g }))}
+            label="Genre"
+          />
+          <FilterSelect
+            value={language}
+            onChange={(val) => setFilter("language", val)}
+            options={languages.map((l) => ({ value: l, label: l }))}
+            label="Language"
+          />
+          <SortingSelect
+            label="Sort by"
+            value={sortField}
+            onChange={(val) => setFilter("sortField", val)}
+            options={sortOptions}
+          />
+        </Sidebar>
+
+        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  ">
+          {isLoading && <p>Loading movies...</p>}
+          {isError && <p>Error: {error?.message}</p>}
+          {data?.data.map((movie) => (
+            <Card
+              key={movie.id}
+              title={movie.title}
+              subtitle={movie.genre.join(", ")}
+              rating={movie.rating}
+              year={movie.year}
+              onClick={() => console.log("Movie clicked:", movie.id)}
+              buttonText="View Details"
+            />
+          ))}
+        </main>
+      </div>
+
+      {/* Footer + Pagination */}
+      <Footer>
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(val) => setFilter("page", val)}
+        />
+      </Footer>
     </div>
   );
 }
