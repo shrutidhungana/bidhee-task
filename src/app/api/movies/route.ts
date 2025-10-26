@@ -84,3 +84,52 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+export async function POST(req: NextRequest) {
+  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+  const passwordHeader = req.headers.get("x-admin-password");
+  if (!passwordHeader || passwordHeader !== adminPassword) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const requiredFields = [
+      "title",
+      "language",
+      "year",
+      "genre",
+      "rating",
+      "director",
+      "runtime",
+      "synopsis",
+      "cast",
+      "posterUrl",
+    ];
+    for (const field of requiredFields) {
+      if (!(field in body)) {
+        return NextResponse.json(
+          { message: `Missing field: ${field}` },
+          { status: 400 }
+        );
+      }
+    }
+
+    const data = await fs.readFile(moviesFile, "utf-8");
+    const movies: Movie[] = JSON.parse(data);
+    const newMovie: Movie = {
+      id: movies.length ? Math.max(...movies.map((m) => m.id)) + 1 : 1,
+      ...body,
+      reviewCount: 0,
+      averageReviewRating: 0,
+    };
+    movies.push(newMovie);
+    await fs.writeFile(moviesFile, JSON.stringify(movies, null, 2));
+    return NextResponse.json(newMovie, { status: 201 });
+  } catch (err) {
+    return NextResponse.json(
+      { message: "Failed to create movie" },
+      { status: 500 }
+    );
+  }
+}
