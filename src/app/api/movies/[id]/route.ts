@@ -43,3 +43,64 @@ export async function GET(
     );
   }
 }
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+  const passwordHeader = req.headers.get("x-admin-password");
+  if (!passwordHeader || passwordHeader !== adminPassword) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const movieId = parseInt(params.id);
+    const body = await req.json();
+
+    const data = await fs.readFile(moviesFile, "utf-8");
+    const movies: Movie[] = JSON.parse(data);
+    const index = movies.findIndex((m) => m.id === movieId);
+    if (index === -1)
+      return NextResponse.json({ message: "Movie not found" }, { status: 404 });
+
+    movies[index] = { ...movies[index], ...body };
+    await fs.writeFile(moviesFile, JSON.stringify(movies, null, 2));
+    return NextResponse.json(movies[index]);
+  } catch (err) {
+    return NextResponse.json(
+      { message: "Failed to update movie" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
+  const passwordHeader = req.headers.get("x-admin-password");
+  if (!passwordHeader || passwordHeader !== adminPassword) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const movieId = parseInt(params.id);
+    const data = await fs.readFile(moviesFile, "utf-8");
+    let movies: Movie[] = JSON.parse(data);
+    const index = movies.findIndex((m) => m.id === movieId);
+    if (index === -1)
+      return NextResponse.json({ message: "Movie not found" }, { status: 404 });
+
+    const deleted = movies.splice(index, 1)[0];
+    await fs.writeFile(moviesFile, JSON.stringify(movies, null, 2));
+    return NextResponse.json(deleted);
+  } catch (err) {
+    return NextResponse.json(
+      { message: "Failed to delete movie" },
+      { status: 500 }
+    );
+  }
+}
+
