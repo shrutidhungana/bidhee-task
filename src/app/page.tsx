@@ -136,11 +136,12 @@ export default function Home() {
               onChange={(val) => setFilter("sortField", val)}
               options={[
                 { value: "all", label: "All" },
-                { value: "rating", label: "Rating" },
-                { value: "year", label: "Year" },
-                { value: "title", label: "Title" },
-                { value: "reviewCount", label: "Review Count" },
-                
+                { value: "title_asc", label: "Title A-Z" },
+                { value: "title_desc", label: "Title Z-A" },
+                { value: "rating_desc", label: "Rating High-Low" },
+                { value: "rating_asc", label: "Rating Low-High" },
+                { value: "year_desc", label: "Year New-Old" },
+                { value: "year_asc", label: "Year Old-New" },
               ]}
             />
           </Sidebar>
@@ -203,36 +204,39 @@ export default function Home() {
             onChange={(val) => setFilter("sortField", val)}
             options={[
               { value: "all", label: "All" },
-              { value: "rating", label: "Rating" },
-              { value: "year", label: "Year" },
-              { value: "title", label: "Title" },
-              { value: "reviewCount", label: "Review Count" },
+              { value: "title_asc", label: "Title A-Z" },
+              { value: "title_desc", label: "Title Z-A" },
+              { value: "rating_desc", label: "Rating High-Low" },
+              { value: "rating_asc", label: "Rating Low-High" },
+              { value: "year_desc", label: "Year New-Old" },
+              { value: "year_asc", label: "Year Old-New" },
             ]}
           />
         </Sidebar>
 
         <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
-  {isLoading
-    ? Array.from({ length: limit }).map((_, i) => (
-        <CardSkeleton key={i} />
-      ))
-    : isError
-    ? <p>Error: {moviesError?.message}</p>
-    : data?.data.map((movie) => (
-        <Card
-          key={movie.id}
-          title={movie.title}
-          subtitle={movie.genre.join(", ")}
-          rating={movie.rating}
-          year={movie.year}
-          imageUrl={movie.posterUrl}
-          onClick={() => handleCardClick(movie.id)}
-          onButtonClick={() => handleCardClick(movie.id)}
-          buttonText="View Details"
-        />
-      ))
-  }
-</main>
+          {isLoading ? (
+            Array.from({ length: limit }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))
+          ) : isError ? (
+            <p>Error: {moviesError?.message}</p>
+          ) : (
+            data?.data.map((movie) => (
+              <Card
+                key={movie.id}
+                title={movie.title}
+                subtitle={movie.genre.join(", ")}
+                rating={movie.rating}
+                year={movie.year}
+                imageUrl={movie.posterUrl}
+                onClick={() => handleCardClick(movie.id)}
+                onButtonClick={() => handleCardClick(movie.id)}
+                buttonText="View Details"
+              />
+            ))
+          )}
+        </main>
       </div>
 
       <Footer>

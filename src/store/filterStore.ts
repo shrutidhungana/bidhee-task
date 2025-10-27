@@ -17,8 +17,8 @@ export const useFilterStore = create<FilterState>((set) => ({
   search: "",
   genre: "",
   language: "",
-  sortField: "rating",
-  sortOrder: "desc",
+  sortField: "all",
+  sortOrder: "asc",
   setFilter: (key, value) =>
     set((state) => ({
       ...state,

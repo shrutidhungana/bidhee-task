@@ -32,9 +32,17 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get("search")?.toLowerCase() || "";
     const genreFilter = searchParams.get("genre")?.toLowerCase();
     const languageFilter = searchParams.get("language")?.toLowerCase();
-    const sortField = searchParams.get("sortField") || "id";
-    const sortOrder = searchParams.get("sortOrder") || "asc";
+    let sortField = searchParams.get("sortField") || "all"; // default "all"
+    let sortOrder: "asc" | "desc" = "asc";
 
+    // Handle field_order format, e.g., "title_asc", "rating_desc"
+    if (sortField.includes("_")) {
+      const [field, order] = sortField.split("_");
+      sortField = field;
+      sortOrder = order as "asc" | "desc";
+    }
+
+    // --- Filtering ---
     if (search) {
       movies = movies.filter(
         (m) =>
@@ -44,30 +52,34 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    if (genreFilter) {
+    if (genreFilter && genreFilter !== "all") {
       movies = movies.filter((m) =>
         m.genre.some((g) => g.toLowerCase() === genreFilter)
       );
     }
 
-    if (languageFilter) {
+    if (languageFilter && languageFilter !== "all") {
       movies = movies.filter(
         (m) => m.language.toLowerCase() === languageFilter
       );
     }
 
-    movies.sort((a, b) => {
-      let valA = (a as any)[sortField];
-      let valB = (b as any)[sortField];
+    // --- Sorting ---
+    if (sortField !== "all") {
+      movies.sort((a, b) => {
+        let valA = (a as any)[sortField];
+        let valB = (b as any)[sortField];
 
-      if (typeof valA === "string") valA = valA.toLowerCase();
-      if (typeof valB === "string") valB = valB.toLowerCase();
+        if (typeof valA === "string") valA = valA.toLowerCase();
+        if (typeof valB === "string") valB = valB.toLowerCase();
 
-      if (valA < valB) return sortOrder === "asc" ? -1 : 1;
-      if (valA > valB) return sortOrder === "asc" ? 1 : -1;
-      return 0;
-    });
+        if (valA < valB) return sortOrder === "asc" ? -1 : 1;
+        if (valA > valB) return sortOrder === "asc" ? 1 : -1;
+        return 0;
+      });
+    }
 
+    // --- Pagination ---
     const start = (page - 1) * limit;
     const paginatedMovies = movies.slice(start, start + limit);
 
@@ -78,13 +90,13 @@ export async function GET(req: NextRequest) {
       data: paginatedMovies,
     });
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Failed to load movies" },
       { status: 500 }
     );
   }
 }
-
 export async function POST(req: NextRequest) {
   const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
   const passwordHeader = req.headers.get("x-admin-password");
