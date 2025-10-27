@@ -148,7 +148,7 @@ export default function Home() {
           </Sidebar>
         </div>
 
-        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
+        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16 items-start">
           {isLoading ? (
             // Show skeletons while loading
             Array.from({ length: limit }).map((_, i) => (
@@ -172,7 +172,6 @@ export default function Home() {
               />
             ))
           ) : (
-            
             <div className="col-span-full">
               <Empty
                 title="No movies found"
@@ -186,7 +185,6 @@ export default function Home() {
         </main>
       </div>
 
-      
       <div className="md:hidden px-4 pt-6">
         <Sidebar title="Filters">
           <FilterSelect
@@ -228,7 +226,7 @@ export default function Home() {
           />
         </Sidebar>
 
-        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
+        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16 items-start">
           {isLoading ? (
             // Show skeletons while loading
             Array.from({ length: limit }).map((_, i) => (
@@ -237,7 +235,6 @@ export default function Home() {
           ) : isError ? (
             <p>Error: {moviesError?.message}</p>
           ) : data?.data && data.data.length > 0 ? (
-            
             data.data.map((movie) => (
               <Card
                 key={movie.id}
@@ -252,7 +249,6 @@ export default function Home() {
               />
             ))
           ) : (
-          
             <div className="col-span-full">
               <Empty
                 title="No movies found"
@@ -274,7 +270,6 @@ export default function Home() {
         />
       </Footer>
 
-     
       {isLoginOpen && (
         <LoginForm
           username={username}

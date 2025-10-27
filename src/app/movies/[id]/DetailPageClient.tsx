@@ -9,6 +9,7 @@ import { useReviews } from "@/hooks/useReviews";
 import { useReviewStore } from "@/store/reviewStore";
 import DetailCard from "@/components/DetailCard";
 import useToast from "@/hooks/useToast";
+import { CardSkeleton } from "@/components/Skeleton";
 
 interface DetailPageClientProps {
   movieId: number;
@@ -62,9 +63,9 @@ const DetailPageClient: React.FC<DetailPageClientProps> = ({ movieId }) => {
 
   if (isLoading)
     return (
-      <p className="pt-24 px-4 text-gray-500 animate-pulse text-center text-lg">
-        Loading...
-      </p>
+      <div className="pt-24 px-4 flex justify-center">
+        <CardSkeleton />
+      </div>
     );
 
   if (isError || !movie)

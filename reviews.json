@@ -342,5 +342,13 @@
     "rating": 5,
     "reviewText": "Good thriller",
     "createdAt": "2025-10-27T14:29:42.555Z"
+  },
+  {
+    "id": 44,
+    "movieId": 1,
+    "userName": "Hannah",
+    "rating": 4,
+    "reviewText": "Good watch",
+    "createdAt": "2025-10-27T18:06:59.645Z"
   }
 ]
