@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Navbar from "@/components/Navbar";
-import Hero from "@/components/Hero";
 import { useRouter } from "next/navigation";
 import { useMovie } from "@/hooks/useMovie";
 import { useMovieStore } from "@/store/movieStore";
+import { useReviews, Review } from "@/hooks/useReviews";
+import { useReviewStore } from "@/store/reviewStore";
+import DetailCard from "@/components/DetailCard";
 
 interface DetailPageProps {
   params: {
@@ -15,14 +17,52 @@ interface DetailPageProps {
 
 const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
   const router = useRouter();
-  const movieId = params.id;
+  const movieId = Number(params.id);
 
+  // Movie data
   const { data: movie, isLoading, isError } = useMovie(movieId);
   const setMovie = useMovieStore((state) => state.setMovie);
 
+  // Reviews data
+  const { data: reviews = [], addReview, isAdding } = useReviews(movieId);
+  const setReviews = useReviewStore((state) => state.setReviews);
+
+  // Local state for ReviewForm
+  const [userName, setUserName] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [rating, setRating] = useState(0);
+
+  // Set movie in store
   useEffect(() => {
     if (movie) setMovie(movie);
   }, [movie, setMovie]);
+
+  // Set reviews in store
+  useEffect(() => {
+    if (reviews.length) setReviews(reviews);
+  }, [reviews, setReviews]);
+
+  // Average rating calculation
+  const averageRating = useMemo(() => {
+    if (!reviews.length) return 0;
+    return reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
+  }, [reviews]);
+
+  // Handle form submission
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!userName || !reviewText || !rating) return;
+
+    try {
+      await addReview({ movieId, userName, reviewText, rating });
+      // Clear form after submission
+      setUserName("");
+      setReviewText("");
+      setRating(0);
+    } catch (err) {
+      console.error("Failed to add review", err);
+    }
+  };
 
   if (isLoading)
     return (
@@ -39,7 +79,6 @@ const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-[#F8FAFC] via-[#EBF2F7] to-[#E2E8F0]">
-      {/* Navbar */}
       <Navbar title="Movie Details">
         <button
           onClick={() => router.push("/")}
@@ -49,57 +88,30 @@ const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
         </button>
       </Navbar>
 
-      {/* Hero Section */}
       <main className="pt-24 px-6 space-y-10">
-        <Hero
+        <DetailCard
           title={movie.title}
-          subtitle={(movie.genre || []).join(", ")}
+          subtitle={`${movie.genre.join(", ")} | ${movie.year} | ${
+            movie.language
+          }`}
           imageUrl={movie.posterUrl}
+          director={movie.director}
+          cast={movie.cast}
+          runtime={movie.runtime}
+          synopsis={movie.synopsis}
+          reviews={reviews}
+          reviewCount={reviews.length}
+          averageRating={averageRating}
+          reviewFormProps={{
+            userName,
+            reviewText,
+            rating,
+            onUserNameChange: setUserName,
+            onReviewTextChange: setReviewText,
+            onRatingChange: setRating,
+            onSubmit: handleSubmit,
+          }}
         />
-
-        {/* Movie Details */}
-        <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-8 space-y-6 transform transition-all duration-500 hover:scale-[1.01]">
-          {/* Basic Info */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-gray-700">
-            <div className="space-y-1">
-              <h3 className="font-semibold">Director</h3>
-              <p className="text-gray-900">{movie.director}</p>
-            </div>
-            <div className="space-y-1">
-              <h3 className="font-semibold">Year</h3>
-              <p className="text-gray-900">{movie.year}</p>
-            </div>
-            <div className="space-y-1">
-              <h3 className="font-semibold">Runtime</h3>
-              <p className="text-gray-900">{movie.runtime} min</p>
-            </div>
-            <div className="space-y-1">
-              <h3 className="font-semibold">Rating</h3>
-              <p className="text-gray-900">{movie.rating} / 10</p>
-            </div>
-          </div>
-
-          {/* Synopsis */}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-gray-700 text-lg">Synopsis</h3>
-            <p className="text-gray-800">{movie.synopsis}</p>
-          </div>
-
-          {/* Cast */}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-gray-700 text-lg">Cast</h3>
-            <p className="text-gray-800">{(movie.cast || []).join(", ")}</p>
-          </div>
-
-          {/* Reviews */}
-          <div className="space-y-2">
-            <h3 className="font-semibold text-gray-700 text-lg">Reviews</h3>
-            <p className="text-gray-800">
-              {movie.reviewCount} reviews, Average Rating:{" "}
-              {movie.averageReviewRating} / 5
-            </p>
-          </div>
-        </div>
       </main>
     </div>
   );
