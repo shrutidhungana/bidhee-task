@@ -31,6 +31,7 @@ interface DrawerAddMovieProps {
 
   onAdd: () => void;
   loading?: boolean;
+  buttonText?: string; // <-- New prop
 }
 
 const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
@@ -58,6 +59,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
   onCastChange,
   onAdd,
   loading = false,
+  buttonText = "Add", // default to Add
 }) => {
   return (
     <div
@@ -77,7 +79,9 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
       >
         {/* Header */}
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold text-purple-700">Add Movie</h2>
+          <h2 className="text-2xl font-bold text-purple-700">
+            {buttonText} Movie
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -93,12 +97,8 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
             value={posterUrl || ""}
             onChange={(file, preview) => {
               onPosterChange(file);
-              if (preview) {
-                
-                onPosterChange(file);
-              }
             }}
-            storageKey="newMoviePoster"
+            storageKey="moviePoster"
           />
         </div>
 
@@ -212,7 +212,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Add Button */}
+        {/* Add/Update Button */}
         <button
           onClick={onAdd}
           disabled={loading}
@@ -222,7 +222,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
               : "bg-purple-700 hover:bg-purple-800"
           }`}
         >
-          {loading ? "Adding..." : "Add"}
+          {loading ? `${buttonText}ing...` : buttonText}
         </button>
       </div>
     </div>

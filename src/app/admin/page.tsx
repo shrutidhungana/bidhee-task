@@ -9,7 +9,12 @@ import DrawerAddMovie from "@/components/DrawerAddMovie";
 import DeleteModal from "@/components/DeleteModal";
 import { useLoginStore } from "@/store/loginStore";
 import { useFilterStore } from "@/store/filterStore";
-import { useMovies, useCreateMovie, useDeleteMovie } from "@/hooks/useMovies";
+import {
+  useMovies,
+  useCreateMovie,
+  useDeleteMovie,
+  useUpdateMovie,
+} from "@/hooks/useMovies";
 import { useRouter } from "next/navigation";
 import useToast from "@/hooks/useToast";
 import { FiPlus } from "react-icons/fi";
@@ -50,6 +55,11 @@ const Admin: React.FC = () => {
       genre: movie.genre.join(", "),
       year: movie.year?.toString() || "",
       language: movie.language,
+      rating: movie.rating.toString(),
+      director: movie.director,
+      runtime: movie.runtime.toString(),
+      synopsis: movie.synopsis,
+      cast: movie.cast.join(", "),
     })) || [];
 
   const columns = [
@@ -60,7 +70,7 @@ const Admin: React.FC = () => {
     { key: "language", label: "Language" },
   ];
 
-  // Add Movie Drawer States
+  // Drawer States
   const [isDrawerOpen, setDrawerOpen] = useState(false);
   const [posterUrl, setPosterUrl] = useState<File | null>(null);
   const [title, setTitle] = useState("");
@@ -74,54 +84,79 @@ const Admin: React.FC = () => {
   const [cast, setCast] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const [editingMovieId, setEditingMovieId] = useState<number | null>(null);
+
   const createMovie = useCreateMovie();
+  const updateMovie = useUpdateMovie();
   const deleteMovieMutation = useDeleteMovie();
 
-  const handleAddMovie = () => {
-    if (!posterUrl) {
-      toastError("Please select a poster image");
+  const openAddDrawer = () => {
+    setEditingMovieId(null);
+    setPosterUrl(null);
+    setTitle("");
+    setLanguage("");
+    setGenre("");
+    setYear("");
+    setRating("");
+    setDirector("");
+    setRuntime("");
+    setSynopsis("");
+    setCast("");
+    setDrawerOpen(true);
+  };
+
+  const handleAddOrUpdate = () => {
+    if (!title || !language) {
+      toastError("Title and Language are required");
       return;
     }
 
-    const posterDemoUrl = posterUrl ? URL.createObjectURL(posterUrl) : "";
     setLoading(true);
 
-    createMovie.mutate(
-      {
-        title,
-        language,
-        genre: genre.split(",").map((g) => g.trim()),
-        year,
-        rating,
-        director,
-        runtime,
-        synopsis,
-        cast: cast.split(",").map((c) => c.trim()),
-        posterUrl: posterDemoUrl,
-      },
-      {
+    const movieData = {
+      title,
+      language,
+      genre: genre.split(",").map((g) => g.trim()),
+      year,
+      rating,
+      director,
+      runtime,
+      synopsis,
+      cast: cast.split(",").map((c) => c.trim()),
+      posterUrl: posterUrl ? URL.createObjectURL(posterUrl) : "",
+    };
+
+    if (editingMovieId) {
+      // Update
+      updateMovie.mutate(
+        { id: editingMovieId, data: movieData },
+        {
+          onSuccess: () => {
+            success("Movie updated successfully!");
+            setDrawerOpen(false);
+            setEditingMovieId(null);
+            setLoading(false);
+          },
+          onError: (err: any) => {
+            toastError(err.message || "Failed to update movie");
+            setLoading(false);
+          },
+        }
+      );
+    } else {
+      // Add
+      createMovie.mutate(movieData, {
         onSuccess: () => {
           success("Movie added successfully!");
           setDrawerOpen(false);
-
-          setPosterUrl(null);
-          setTitle("");
-          setLanguage("");
-          setGenre("");
-          setYear("");
-          setRating("");
-          setDirector("");
-          setRuntime("");
-          setSynopsis("");
-          setCast("");
           setLoading(false);
         },
         onError: (err: any) => {
           toastError(err.message || "Failed to add movie");
           setLoading(false);
         },
-      }
-    );
+      });
+    }
   };
 
   // Delete Modal States
@@ -150,6 +185,24 @@ const Admin: React.FC = () => {
     });
   };
 
+  const handleEditClick = (id: number | string) => {
+    const movie = tableData.find((m) => m.id === id);
+    if (!movie) return;
+
+    setEditingMovieId(Number(id));
+    setPosterUrl(null); // You can implement preview if needed
+    setTitle(movie.title || "");
+    setLanguage(movie.language || "");
+    setGenre(movie.genre || "");
+    setYear(movie.year?.toString() || "");
+    setRating(movie.rating || "");
+    setDirector(movie.director || "");
+    setRuntime(movie.runtime || "");
+    setSynopsis(movie.synopsis || "");
+    setCast(movie.cast || "");
+    setDrawerOpen(true);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-100">
       <Navbar title="Admin Panel">
@@ -163,7 +216,7 @@ const Admin: React.FC = () => {
 
       <div className="pt-20 px-6 flex justify-end mb-4">
         <button
-          onClick={() => setDrawerOpen(true)}
+          onClick={openAddDrawer}
           className="flex items-center gap-2 bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded shadow-md transition"
         >
           <FiPlus size={18} />
@@ -185,7 +238,7 @@ const Admin: React.FC = () => {
             <TableComponent
               columns={columns}
               data={tableData}
-              onEdit={(id) => console.log("Edit movie", id)}
+              onEdit={handleEditClick}
               onDelete={(id) => {
                 const row = tableData.find((r) => r.id === id);
                 if (row) handleDeleteClick(row);
@@ -203,7 +256,6 @@ const Admin: React.FC = () => {
         />
       </Footer>
 
-   
       <DrawerAddMovie
         isOpen={isDrawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -227,13 +279,14 @@ const Admin: React.FC = () => {
         onSynopsisChange={setSynopsis}
         cast={cast}
         onCastChange={setCast}
-        onAdd={handleAddMovie}
+        onAdd={handleAddOrUpdate}
         loading={loading}
+        // Change button text dynamically
+        buttonText={editingMovieId ? "Update" : "Add"}
       />
 
-     
-          <DeleteModal
-              title= "Delete Movie"
+      <DeleteModal
+        title="Delete Movie"
         open={deleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
         question={`Are you sure you want to delete "${movieToDelete?.title}"?`}
