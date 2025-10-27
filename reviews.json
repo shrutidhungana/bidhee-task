@@ -334,5 +334,13 @@
     "rating": 4,
     "reviewText": "Good movie on friends",
     "createdAt": "2025-10-27T11:31:11.416Z"
+  },
+  {
+    "id": 43,
+    "movieId": 21,
+    "userName": "John",
+    "rating": 5,
+    "reviewText": "Good thriller",
+    "createdAt": "2025-10-27T14:29:42.555Z"
   }
 ]

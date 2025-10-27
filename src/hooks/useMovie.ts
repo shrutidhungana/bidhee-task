@@ -1,6 +1,11 @@
 "use client";
 
-import { useQuery, UseQueryOptions } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 
 export interface MovieDetail {
   id: number;
@@ -18,6 +23,7 @@ export interface MovieDetail {
   averageReviewRating: number;
 }
 
+// Fetch single movie
 export const useMovie = (
   id: string | number,
   options?: UseQueryOptions<MovieDetail, Error, MovieDetail>
@@ -29,7 +35,34 @@ export const useMovie = (
       if (!res.ok) throw new Error("Failed to fetch movie details");
       return res.json();
     },
-    staleTime: 1000 * 60 * 5, 
+    staleTime: 1000 * 60 * 5,
     ...options,
+  });
+};
+
+// Update single movie
+export const useUpdateMovieDetail = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async ({
+      id,
+      data,
+    }: {
+      id: number;
+      data: Partial<MovieDetail>;
+    }) => {
+      const res = await fetch(`/api/movies/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-password": process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "",
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error("Failed to update movie");
+      return res.json();
+    },
+    onSuccess: (_, { id }) =>
+      queryClient.invalidateQueries({ queryKey: ["movie", id] }),
   });
 };
