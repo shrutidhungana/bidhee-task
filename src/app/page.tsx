@@ -165,7 +165,7 @@ export default function Home() {
         </main>
       </div>
 
-      {/* Footer + Pagination */}
+      
       <Footer>
         <Pagination
           currentPage={page}

@@ -78,7 +78,7 @@ const Card: React.FC<CardProps> = ({
         <div className="flex justify-between items-center text-gray-700 text-sm mb-3">
           {year && <span className="font-medium">Year: {year}</span>}
           {rating !== undefined && (
-            <span className="font-medium">⭐ {rating}/10</span>
+            <span className="font-medium">⭐ {rating}/5</span>
           )}
         </div>
 
