@@ -17,6 +17,7 @@ import LoginForm from "@/components/LoginForm";
 import { useLogin } from "@/hooks/useLogin";
 import { useLoginStore } from "@/store/loginStore";
 import useToast from "@/hooks/useToast";
+import { CardSkeleton } from "@/components/Skeleton"; 
 
 
 export default function Home() {
@@ -103,7 +104,6 @@ export default function Home() {
         </button>
       </Navbar>
 
-      
       <div className="hidden md:flex pt-6">
         <div className="w-64 mt-8">
           <Sidebar title="Filters">
@@ -140,27 +140,34 @@ export default function Home() {
                 { value: "year", label: "Year" },
                 { value: "title", label: "Title" },
                 { value: "reviewCount", label: "Review Count" },
+                
               ]}
             />
           </Sidebar>
         </div>
 
         <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
-          {isLoading && <p>Loading movies...</p>}
-          {isError && <p>Error: {moviesError?.message}</p>}
-          {data?.data.map((movie) => (
-            <Card
-              key={movie.id}
-              title={movie.title}
-              subtitle={movie.genre.join(", ")}
-              rating={movie.rating}
-              year={movie.year}
-              imageUrl={movie.posterUrl}
-              onClick={() => handleCardClick(movie.id)}
-              onButtonClick={() => handleCardClick(movie.id)}
-              buttonText="View Details"
-            />
-          ))}
+          {isLoading ? (
+            Array.from({ length: limit }).map((_, i) => (
+              <CardSkeleton key={i} />
+            ))
+          ) : isError ? (
+            <p>Error: {moviesError?.message}</p>
+          ) : (
+            data?.data.map((movie) => (
+              <Card
+                key={movie.id}
+                title={movie.title}
+                subtitle={movie.genre.join(", ")}
+                rating={movie.rating}
+                year={movie.year}
+                imageUrl={movie.posterUrl}
+                onClick={() => handleCardClick(movie.id)}
+                onButtonClick={() => handleCardClick(movie.id)}
+                buttonText="View Details"
+              />
+            ))
+          )}
         </main>
       </div>
 
@@ -204,23 +211,28 @@ export default function Home() {
           />
         </Sidebar>
 
-        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {isLoading && <p>Loading movies...</p>}
-          {isError && <p>Error: {moviesError?.message}</p>}
-          {data?.data.map((movie) => (
-            <Card
-              key={movie.id}
-              title={movie.title}
-              subtitle={movie.genre.join(", ")}
-              rating={movie.rating}
-              imageUrl={movie.posterUrl}
-              year={movie.year}
-              onClick={() => handleCardClick(movie.id)}
-              onButtonClick={() => handleCardClick(movie.id)}
-              buttonText="View Details"
-            />
-          ))}
-        </main>
+        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
+  {isLoading
+    ? Array.from({ length: limit }).map((_, i) => (
+        <CardSkeleton key={i} />
+      ))
+    : isError
+    ? <p>Error: {moviesError?.message}</p>
+    : data?.data.map((movie) => (
+        <Card
+          key={movie.id}
+          title={movie.title}
+          subtitle={movie.genre.join(", ")}
+          rating={movie.rating}
+          year={movie.year}
+          imageUrl={movie.posterUrl}
+          onClick={() => handleCardClick(movie.id)}
+          onButtonClick={() => handleCardClick(movie.id)}
+          buttonText="View Details"
+        />
+      ))
+  }
+</main>
       </div>
 
       <Footer>
