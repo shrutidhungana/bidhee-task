@@ -8,6 +8,7 @@ import { useMovieStore } from "@/store/movieStore";
 import { useReviews, Review } from "@/hooks/useReviews";
 import { useReviewStore } from "@/store/reviewStore";
 import DetailCard from "@/components/DetailCard";
+import useToast from "@/hooks/useToast";
 
 interface DetailPageProps {
   params: {
@@ -19,51 +20,60 @@ const DetailPage: React.FC<DetailPageProps> = ({ params }) => {
   const router = useRouter();
   const movieId = Number(params.id);
 
-  // Movie data
+ 
   const { data: movie, isLoading, isError } = useMovie(movieId);
   const setMovie = useMovieStore((state) => state.setMovie);
 
-  // Reviews data
+ 
   const { data: reviews = [], addReview, isAdding } = useReviews(movieId);
   const setReviews = useReviewStore((state) => state.setReviews);
 
-  // Local state for ReviewForm
+    const { success, error } = useToast();
+
+  
   const [userName, setUserName] = useState("");
   const [reviewText, setReviewText] = useState("");
   const [rating, setRating] = useState(0);
 
-  // Set movie in store
+
+  
   useEffect(() => {
     if (movie) setMovie(movie);
   }, [movie, setMovie]);
 
-  // Set reviews in store
+  
   useEffect(() => {
     if (reviews.length) setReviews(reviews);
   }, [reviews, setReviews]);
 
-  // Average rating calculation
   const averageRating = useMemo(() => {
     if (!reviews.length) return 0;
     return reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length;
   }, [reviews]);
 
-  // Handle form submission
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!userName || !reviewText || !rating) return;
+  
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  if (!userName || !reviewText || !rating) {
+    error("Please fill all fields and select a rating.");
+    return;
+  }
 
-    try {
-      await addReview({ movieId, userName, reviewText, rating });
-      // Clear form after submission
-      setUserName("");
-      setReviewText("");
-      setRating(0);
-    } catch (err) {
-      console.error("Failed to add review", err);
-    }
-  };
+  try {
+    const result = await addReview({ movieId, userName, reviewText, rating });
+    
+    setUserName("");
+    setReviewText("");
+    setRating(0);
 
+    success("Review added successfully!"); 
+  } catch (err: any) {
+    console.error("Failed to add review", err);
+    const message =
+      err?.message || "Something went wrong while adding your review.";
+    error(message); 
+  }
+};
   if (isLoading)
     return (
       <p className="pt-24 px-4 text-gray-500 animate-pulse text-center text-lg">

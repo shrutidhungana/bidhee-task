@@ -24,7 +24,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 }) => {
   return (
     <form className="flex flex-col gap-4 bg-transparent" onSubmit={onSubmit}>
-      {/* Name */}
+     
       <input
         type="text"
         placeholder="Your Name"
@@ -33,7 +33,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
 
-      {/* Review Text */}
+      
       <textarea
         placeholder="Write your review..."
         value={reviewText}
@@ -42,7 +42,7 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
       />
 
-      {/* Star Rating */}
+      
       <div>
         <span className="block mb-1 text-gray-700">Rating:</span>
         <StarRatingSelector
