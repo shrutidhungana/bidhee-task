@@ -15,6 +15,12 @@ export interface Movie {
   genre: string[];
   rating: number;
   posterUrl: string;
+  cast: string[];
+  director: string;
+  synopsis: string;
+  runtime: number;
+
+
 }
 
 interface QueryParams {

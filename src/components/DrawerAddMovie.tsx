@@ -95,10 +95,9 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           <label className="font-semibold text-gray-700">Poster</label>
           <ImageUpload
             value={posterUrl || ""}
-            onChange={(file, preview) => {
-              onPosterChange(file);
+            onChange={(file, base64) => {
+              onPosterChange(base64 || null); // store Base64 directly
             }}
-            storageKey="moviePoster"
           />
         </div>
 
@@ -155,7 +154,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           <label className="font-semibold text-gray-700">Rating</label>
           <input
             type="text"
-            placeholder="Rating (0-10)"
+            placeholder="Rating (0-5)"
             value={rating}
             onChange={(e) => onRatingChange(e.target.value)}
             className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"

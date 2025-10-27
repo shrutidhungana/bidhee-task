@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import useToast from "@/hooks/useToast";
 import { FiPlus, FiDownload } from "react-icons/fi";
 import { useExportMovies } from "@/hooks/useExportMovies";
+import { TableSkeleton } from "@/components/Skeleton";
 
 const Admin: React.FC = () => {
   const loginStore = useLoginStore();
@@ -28,7 +29,7 @@ const Admin: React.FC = () => {
   const handleLogout = () => {
     loginStore.setLogin(false);
     success("Logged out successfully!");
-    router.push("/");
+    router.push("/?page=1");
   };
 
   // Pagination & Filters
@@ -51,7 +52,7 @@ const Admin: React.FC = () => {
   const tableData: TableRow[] =
     data?.data.map((movie) => ({
       id: movie.id,
-      imageUrl: movie.posterUrl,
+      imageUrl: movie.posterUrl, // now Base64 from backend
       title: movie.title,
       genre: movie.genre.join(", "),
       year: movie.year?.toString() || "",
@@ -73,7 +74,7 @@ const Admin: React.FC = () => {
 
   // Drawer States
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [posterUrl, setPosterUrl] = useState<File | null>(null);
+  const [posterUrl, setPosterUrl] = useState<string | null>(null); // store Base64
   const [title, setTitle] = useState("");
   const [language, setLanguage] = useState("");
   const [genre, setGenre] = useState("");
@@ -84,7 +85,6 @@ const Admin: React.FC = () => {
   const [synopsis, setSynopsis] = useState("");
   const [cast, setCast] = useState("");
   const [loading, setLoading] = useState(false);
-
   const [editingMovieId, setEditingMovieId] = useState<number | null>(null);
 
   const createMovie = useCreateMovie();
@@ -92,6 +92,7 @@ const Admin: React.FC = () => {
   const deleteMovieMutation = useDeleteMovie();
   const exportMutation = useExportMovies();
 
+  // Open drawer for adding a movie
   const openAddDrawer = () => {
     setEditingMovieId(null);
     setPosterUrl(null);
@@ -107,6 +108,7 @@ const Admin: React.FC = () => {
     setDrawerOpen(true);
   };
 
+  // Add or update movie
   const handleAddOrUpdate = () => {
     if (!title || !language) {
       toastError("Title and Language are required");
@@ -125,11 +127,10 @@ const Admin: React.FC = () => {
       runtime,
       synopsis,
       cast: cast.split(",").map((c) => c.trim()),
-      posterUrl: posterUrl ? URL.createObjectURL(posterUrl) : "",
+      posterUrl: posterUrl || "", // Base64
     };
 
     if (editingMovieId) {
-      // Update
       updateMovie.mutate(
         { id: editingMovieId, data: movieData },
         {
@@ -146,7 +147,6 @@ const Admin: React.FC = () => {
         }
       );
     } else {
-      // Add
       createMovie.mutate(movieData, {
         onSuccess: () => {
           success("Movie added successfully!");
@@ -161,7 +161,7 @@ const Admin: React.FC = () => {
     }
   };
 
-  // Delete Modal States
+  // Delete Modal
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState<TableRow | null>(null);
 
@@ -187,12 +187,13 @@ const Admin: React.FC = () => {
     });
   };
 
+  // Edit movie
   const handleEditClick = (id: number | string) => {
     const movie = tableData.find((m) => m.id === id);
     if (!movie) return;
 
     setEditingMovieId(Number(id));
-    setPosterUrl(null); // You can implement preview if needed
+    setPosterUrl(movie.posterUrl || null); // show existing Base64 image
     setTitle(movie.title || "");
     setLanguage(movie.language || "");
     setGenre(movie.genre || "");
@@ -216,7 +217,6 @@ const Admin: React.FC = () => {
         </button>
       </Navbar>
 
-      {/* Welcome + Buttons on same line */}
       <div className="pt-20 px-6 mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-purple-700">Welcome, Admin!</h1>
 
@@ -242,7 +242,7 @@ const Admin: React.FC = () => {
       <main className="flex-1 pt-2 px-6">
         <div className="bg-white shadow rounded p-4 mb-6">
           {isLoading ? (
-            <p className="text-gray-600">Loading movies...</p>
+            <TableSkeleton rows={10} cols={columns.length} />
           ) : isError ? (
             <p className="text-red-500">Error: {error?.message}</p>
           ) : (
@@ -270,7 +270,7 @@ const Admin: React.FC = () => {
       <DrawerAddMovie
         isOpen={isDrawerOpen}
         onClose={() => setDrawerOpen(false)}
-        posterUrl={posterUrl ? URL.createObjectURL(posterUrl) : ""}
+        posterUrl={posterUrl || ""}
         onPosterChange={setPosterUrl}
         title={title}
         onTitleChange={setTitle}
