@@ -13,10 +13,12 @@ import Card from "@/components/CardComponent";
 
 import { useFilterStore } from "@/store/filterStore";
 import { useMovies } from "@/hooks/useMovies";
+import { useLoginStore } from "@/store/loginStore";
 
 export default function Home() {
   const router = useRouter();
-  const isAdmin = true;
+  
+   const isAdminLoggedIn = useLoginStore((state) => state.isLoggedIn);
 
   const page = useFilterStore((state) => state.page);
   const limit = useFilterStore((state) => state.limit);
@@ -71,11 +73,23 @@ export default function Home() {
             placeholder="Search movies..."
           />
         </div>
-        {isAdmin && (
-          <button className="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100">
-            Admin Panel
-          </button>
-        )}
+        <div>
+          {isAdminLoggedIn ? (
+            <button
+              className="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100"
+              onClick={() => router.push("/admin/panel")}
+            >
+              Admin Panel
+            </button>
+          ) : (
+            <button
+              className="bg-white text-purple-600 px-4 py-2 rounded hover:bg-gray-100"
+              onClick={() => router.push("/auth/login")}
+            >
+              Admin Login
+            </button>
+          )}
+        </div>
       </Navbar>
 
       <div className="hidden md:flex pt-6">
@@ -165,7 +179,7 @@ export default function Home() {
         </main>
       </div>
 
-      
+      {/* Footer + Pagination */}
       <Footer>
         <Pagination
           currentPage={page}

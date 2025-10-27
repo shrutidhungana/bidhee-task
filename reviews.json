@@ -326,5 +326,13 @@
     "rating": 4,
     "reviewText": "Fantastic movie",
     "createdAt": "2025-10-27T10:58:17.967Z"
+  },
+  {
+    "id": 42,
+    "movieId": 19,
+    "userName": "David",
+    "rating": 4,
+    "reviewText": "Good movie on friends",
+    "createdAt": "2025-10-27T11:31:11.416Z"
   }
 ]
