@@ -6,9 +6,10 @@ import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
 import TableComponent, { TableRow } from "@/components/TableComponent";
 import DrawerAddMovie from "@/components/DrawerAddMovie";
+import DeleteModal from "@/components/DeleteModal";
 import { useLoginStore } from "@/store/loginStore";
 import { useFilterStore } from "@/store/filterStore";
-import { useMovies, useCreateMovie } from "@/hooks/useMovies";
+import { useMovies, useCreateMovie, useDeleteMovie } from "@/hooks/useMovies";
 import { useRouter } from "next/navigation";
 import useToast from "@/hooks/useToast";
 import { FiPlus } from "react-icons/fi";
@@ -59,8 +60,8 @@ const Admin: React.FC = () => {
     { key: "language", label: "Language" },
   ];
 
+  // Add Movie Drawer States
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-
   const [posterUrl, setPosterUrl] = useState<File | null>(null);
   const [title, setTitle] = useState("");
   const [language, setLanguage] = useState("");
@@ -71,11 +72,10 @@ const Admin: React.FC = () => {
   const [runtime, setRuntime] = useState("");
   const [synopsis, setSynopsis] = useState("");
   const [cast, setCast] = useState("");
-
   const [loading, setLoading] = useState(false);
 
-  // ✅ Use react-query mutation
   const createMovie = useCreateMovie();
+  const deleteMovieMutation = useDeleteMovie();
 
   const handleAddMovie = () => {
     if (!posterUrl) {
@@ -84,7 +84,6 @@ const Admin: React.FC = () => {
     }
 
     const posterDemoUrl = posterUrl ? URL.createObjectURL(posterUrl) : "";
-
     setLoading(true);
 
     createMovie.mutate(
@@ -105,7 +104,6 @@ const Admin: React.FC = () => {
           success("Movie added successfully!");
           setDrawerOpen(false);
 
-          // Reset form
           setPosterUrl(null);
           setTitle("");
           setLanguage("");
@@ -116,7 +114,6 @@ const Admin: React.FC = () => {
           setRuntime("");
           setSynopsis("");
           setCast("");
-
           setLoading(false);
         },
         onError: (err: any) => {
@@ -125,6 +122,32 @@ const Admin: React.FC = () => {
         },
       }
     );
+  };
+
+  // Delete Modal States
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [movieToDelete, setMovieToDelete] = useState<TableRow | null>(null);
+
+  const handleDeleteClick = (row: TableRow) => {
+    setMovieToDelete(row);
+    setDeleteModalOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (!movieToDelete) return;
+
+    deleteMovieMutation.mutate(movieToDelete.id, {
+      onSuccess: () => {
+        success(`Movie "${movieToDelete.title}" deleted successfully!`);
+        setDeleteModalOpen(false);
+        setMovieToDelete(null);
+      },
+      onError: (err: any) => {
+        toastError(err.message || "Failed to delete movie");
+        setDeleteModalOpen(false);
+        setMovieToDelete(null);
+      },
+    });
   };
 
   return (
@@ -163,7 +186,10 @@ const Admin: React.FC = () => {
               columns={columns}
               data={tableData}
               onEdit={(id) => console.log("Edit movie", id)}
-              onDelete={(id) => console.log("Delete movie", id)}
+              onDelete={(id) => {
+                const row = tableData.find((r) => r.id === id);
+                if (row) handleDeleteClick(row);
+              }}
             />
           )}
         </div>
@@ -177,6 +203,7 @@ const Admin: React.FC = () => {
         />
       </Footer>
 
+   
       <DrawerAddMovie
         isOpen={isDrawerOpen}
         onClose={() => setDrawerOpen(false)}
@@ -202,6 +229,16 @@ const Admin: React.FC = () => {
         onCastChange={setCast}
         onAdd={handleAddMovie}
         loading={loading}
+      />
+
+     
+          <DeleteModal
+              title= "Delete Movie"
+        open={deleteModalOpen}
+        onClose={() => setDeleteModalOpen(false)}
+        question={`Are you sure you want to delete "${movieToDelete?.title}"?`}
+        onConfirm={handleConfirmDelete}
+        onCancel={() => setDeleteModalOpen(false)}
       />
     </div>
   );
