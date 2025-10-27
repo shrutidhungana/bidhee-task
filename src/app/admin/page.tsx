@@ -17,7 +17,8 @@ import {
 } from "@/hooks/useMovies";
 import { useRouter } from "next/navigation";
 import useToast from "@/hooks/useToast";
-import { FiPlus } from "react-icons/fi";
+import { FiPlus, FiDownload } from "react-icons/fi";
+import { useExportMovies } from "@/hooks/useExportMovies";
 
 const Admin: React.FC = () => {
   const loginStore = useLoginStore();
@@ -89,6 +90,7 @@ const Admin: React.FC = () => {
   const createMovie = useCreateMovie();
   const updateMovie = useUpdateMovie();
   const deleteMovieMutation = useDeleteMovie();
+  const exportMutation = useExportMovies();
 
   const openAddDrawer = () => {
     setEditingMovieId(null);
@@ -214,21 +216,30 @@ const Admin: React.FC = () => {
         </button>
       </Navbar>
 
-      <div className="pt-20 px-6 flex justify-end mb-4">
-        <button
-          onClick={openAddDrawer}
-          className="flex items-center gap-2 bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded shadow-md transition"
-        >
-          <FiPlus size={18} />
-          Add
-        </button>
+      {/* Welcome + Buttons on same line */}
+      <div className="pt-20 px-6 mb-6 flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-purple-700">Welcome, Admin!</h1>
+
+        <div className="flex gap-4">
+          <button
+            onClick={openAddDrawer}
+            className="flex items-center gap-2 bg-purple-700 hover:bg-purple-800 text-white px-4 py-2 rounded shadow-md transition"
+          >
+            <FiPlus size={18} />
+            Add
+          </button>
+          <button
+            onClick={() => exportMutation.mutate()}
+            disabled={exportMutation.isLoading}
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow-md transition"
+          >
+            <FiDownload size={18} />
+            {exportMutation.isLoading ? "Exporting..." : "Export CSV"}
+          </button>
+        </div>
       </div>
 
       <main className="flex-1 pt-2 px-6">
-        <h1 className="text-3xl font-bold text-purple-700 mb-6">
-          Welcome, Admin!
-        </h1>
-
         <div className="bg-white shadow rounded p-4 mb-6">
           {isLoading ? (
             <p className="text-gray-600">Loading movies...</p>
@@ -281,7 +292,6 @@ const Admin: React.FC = () => {
         onCastChange={setCast}
         onAdd={handleAddOrUpdate}
         loading={loading}
-        // Change button text dynamically
         buttonText={editingMovieId ? "Update" : "Add"}
       />
 
