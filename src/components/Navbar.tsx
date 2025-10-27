@@ -5,7 +5,7 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 interface NavbarProps {
   title: string;
-  children?: ReactNode; // anything like buttons, search, links
+  children?: ReactNode; 
 }
 
 const Navbar: React.FC<NavbarProps> = ({ title, children }) => {
@@ -25,7 +25,7 @@ const Navbar: React.FC<NavbarProps> = ({ title, children }) => {
             {children}
           </div>
 
-          {/* Mobile Menu Button */}
+          
           <div className="md:hidden flex items-center">
             <button onClick={toggleMenu}>
               {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
@@ -33,7 +33,7 @@ const Navbar: React.FC<NavbarProps> = ({ title, children }) => {
           </div>
         </div>
 
-        {/* Mobile Menu */}
+       
         {isOpen && (
           <div className="md:hidden mt-2 space-y-2 px-2 pb-4">{children}</div>
         )}
