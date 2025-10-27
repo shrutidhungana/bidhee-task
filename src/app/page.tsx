@@ -18,6 +18,7 @@ import { useLogin } from "@/hooks/useLogin";
 import { useLoginStore } from "@/store/loginStore";
 import useToast from "@/hooks/useToast";
 import { CardSkeleton } from "@/components/Skeleton"; 
+import Empty from "@/components/Empty";
 
 
 export default function Home() {
@@ -149,13 +150,15 @@ export default function Home() {
 
         <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
           {isLoading ? (
+            // Show skeletons while loading
             Array.from({ length: limit }).map((_, i) => (
               <CardSkeleton key={i} />
             ))
           ) : isError ? (
             <p>Error: {moviesError?.message}</p>
-          ) : (
-            data?.data.map((movie) => (
+          ) : data?.data && data.data.length > 0 ? (
+            // Render cards if movies exist
+            data.data.map((movie) => (
               <Card
                 key={movie.id}
                 title={movie.title}
@@ -168,11 +171,22 @@ export default function Home() {
                 buttonText="View Details"
               />
             ))
+          ) : (
+            
+            <div className="col-span-full">
+              <Empty
+                title="No movies found"
+                description="Try adjusting your search or filters."
+                buttonText="Go Home"
+                buttonLink="/"
+                variant="card"
+              />
+            </div>
           )}
         </main>
       </div>
 
-      {/* Mobile */}
+      
       <div className="md:hidden px-4 pt-6">
         <Sidebar title="Filters">
           <FilterSelect
@@ -216,13 +230,15 @@ export default function Home() {
 
         <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 m-16">
           {isLoading ? (
+            // Show skeletons while loading
             Array.from({ length: limit }).map((_, i) => (
               <CardSkeleton key={i} />
             ))
           ) : isError ? (
             <p>Error: {moviesError?.message}</p>
-          ) : (
-            data?.data.map((movie) => (
+          ) : data?.data && data.data.length > 0 ? (
+            
+            data.data.map((movie) => (
               <Card
                 key={movie.id}
                 title={movie.title}
@@ -235,6 +251,17 @@ export default function Home() {
                 buttonText="View Details"
               />
             ))
+          ) : (
+          
+            <div className="col-span-full">
+              <Empty
+                title="No movies found"
+                description="Try adjusting your search or filters."
+                buttonText="Go Home"
+                buttonLink="/"
+                variant="card"
+              />
+            </div>
           )}
         </main>
       </div>
@@ -247,7 +274,7 @@ export default function Home() {
         />
       </Footer>
 
-      {/* --- Login Modal --- */}
+     
       {isLoginOpen && (
         <LoginForm
           username={username}
