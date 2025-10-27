@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import SearchBar from "@/components/Searchbar";
 import Sidebar from "@/components/Sidebar";
@@ -14,6 +15,7 @@ import { useFilterStore } from "@/store/filterStore";
 import { useMovies } from "@/hooks/useMovies";
 
 export default function Home() {
+  const router = useRouter();
   const isAdmin = true;
 
   const page = useFilterStore((state) => state.page);
@@ -25,7 +27,6 @@ export default function Home() {
   const sortOrder = useFilterStore((state) => state.sortOrder);
   const setFilter = useFilterStore((state) => state.setFilter);
 
-  // --- Fetch movies ---
   const { data, isLoading, isError, error } = useMovies({
     page,
     limit,
@@ -55,6 +56,10 @@ export default function Home() {
   ];
 
   const totalPages = Math.ceil((data?.total || 0) / limit);
+
+  const handleCardClick = (id: string | number) => {
+    router.push(`/movies/${id}/`);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -109,7 +114,9 @@ export default function Home() {
               subtitle={movie.genre.join(", ")}
               rating={movie.rating}
               year={movie.year}
-              onClick={() => console.log("Movie clicked:", movie.id)}
+              imageUrl={movie.posterUrl}
+              onClick={() => handleCardClick(movie.id)}
+              onButtonClick={() => handleCardClick(movie.id)}
               buttonText="View Details"
             />
           ))}
@@ -139,7 +146,7 @@ export default function Home() {
           />
         </Sidebar>
 
-        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6  ">
+        <main className="flex-1 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {isLoading && <p>Loading movies...</p>}
           {isError && <p>Error: {error?.message}</p>}
           {data?.data.map((movie) => (
@@ -148,8 +155,10 @@ export default function Home() {
               title={movie.title}
               subtitle={movie.genre.join(", ")}
               rating={movie.rating}
+              imageUrl={movie.posterUrl}
               year={movie.year}
-              onClick={() => console.log("Movie clicked:", movie.id)}
+              onClick={() => handleCardClick(movie.id)}
+              onButtonClick={() => handleCardClick(movie.id)}
               buttonText="View Details"
             />
           ))}

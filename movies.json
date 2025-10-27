@@ -10,9 +10,10 @@
     "runtime": 136,
     "synopsis": "A computer hacker learns about the true nature of reality...",
     "cast": ["Keanu Reeves", "Laurence Fishburne"],
-  
+
     "reviewCount": 5,
-    "averageReviewRating": 4.2
+    "averageReviewRating": 4.2,
+    "posterUrl": "/The-Matrix.png"
   },
   {
     "id": 2,
@@ -25,9 +26,10 @@
     "runtime": 148,
     "synopsis": "A thief steals corporate secrets through dream-sharing technology...",
     "cast": ["Leonardo DiCaprio", "Joseph Gordon-Levitt"],
-  
+
     "reviewCount": 6,
-    "averageReviewRating": 4.5
+    "averageReviewRating": 4.5,
+    "posterUrl": "/Inception.jpg"
   },
   {
     "id": 3,
@@ -40,9 +42,10 @@
     "runtime": 170,
     "synopsis": "Two friends search for their long-lost companion...",
     "cast": ["Aamir Khan", "R. Madhavan", "Sharman Joshi"],
-    
+
     "reviewCount": 8,
-    "averageReviewRating": 4.5
+    "averageReviewRating": 4.5,
+    "posterUrl": "/3-Idiots.jpg"
   },
   {
     "id": 4,
@@ -56,7 +59,8 @@
     "synopsis": "A story of a gang planning a bank heist in Kathmandu...",
     "cast": ["Saugat Malla", "Dayahang Rai", "Rajesh Hamal"],
     "reviewCount": 6,
-    "averageReviewRating": 4.1
+    "averageReviewRating": 4.1,
+    "posterUrl": "/Loot.jpg"
   },
   {
     "id": 5,
@@ -70,7 +74,8 @@
     "synopsis": "Greed and class discrimination threaten a newly formed symbiotic relationship...",
     "cast": ["Kang-ho Song", "Sun-kyun Lee"],
     "reviewCount": 7,
-    "averageReviewRating": 4.4
+    "averageReviewRating": 4.4,
+    "posterUrl": "/Parasite.jpg"
   },
   {
     "id": 6,
@@ -84,7 +89,8 @@
     "synopsis": "A troubled surgeon spirals into self-destructive behavior after heartbreak...",
     "cast": ["Shahid Kapoor", "Kiara Advani"],
     "reviewCount": 5,
-    "averageReviewRating": 3.8
+    "averageReviewRating": 3.8,
+    "posterUrl": "/Kabir-Singh.jpg"
   },
   {
     "id": 7,
@@ -98,7 +104,8 @@
     "synopsis": "The Avengers assemble to reverse Thanos’ actions...",
     "cast": ["Robert Downey Jr.", "Chris Evans"],
     "reviewCount": 10,
-    "averageReviewRating": 4.7
+    "averageReviewRating": 4.7,
+    "posterUrl": "/Avengers-Endgame.jpg"
   },
   {
     "id": 8,
@@ -112,7 +119,8 @@
     "synopsis": "A former wrestler trains his daughters to become world-class wrestlers...",
     "cast": ["Aamir Khan", "Sanya Malhotra"],
     "reviewCount": 9,
-    "averageReviewRating": 4.6
+    "averageReviewRating": 4.6,
+    "posterUrl": "/Dangal.jpg"
   },
   {
     "id": 9,
@@ -126,7 +134,8 @@
     "synopsis": "A comedy about middle-class families in Kathmandu...",
     "cast": ["Magne Buda", "Jeetu Nepal"],
     "reviewCount": 4,
-    "averageReviewRating": 3.9
+    "averageReviewRating": 3.9,
+    "posterUrl": "/Chakka-Panja.jpg"
   },
   {
     "id": 10,
@@ -140,7 +149,8 @@
     "synopsis": "Batman faces the Joker, a criminal mastermind...",
     "cast": ["Christian Bale", "Heath Ledger"],
     "reviewCount": 12,
-    "averageReviewRating": 4.9
+    "averageReviewRating": 4.9,
+    "posterUrl": "/The-Dark-Knight.jpg"
   },
   {
     "id": 11,
@@ -154,7 +164,8 @@
     "synopsis": "An NRI returns to India to find his roots and help his village...",
     "cast": ["Shah Rukh Khan", "Gayatri Joshi"],
     "reviewCount": 6,
-    "averageReviewRating": 4.3
+    "averageReviewRating": 4.3,
+    "posterUrl": "/Swades.jpg"
   },
   {
     "id": 12,
@@ -168,7 +179,8 @@
     "synopsis": "A story of unrequited love in rural Nepal...",
     "cast": ["Saugat Malla", "Rishma Gurung"],
     "reviewCount": 5,
-    "averageReviewRating": 4.0
+    "averageReviewRating": 4.0,
+    "posterUrl": "/Kabaddi.jpg"
   },
   {
     "id": 13,
@@ -182,7 +194,8 @@
     "synopsis": "A team of explorers travel through a wormhole in space...",
     "cast": ["Matthew McConaughey", "Anne Hathaway"],
     "reviewCount": 7,
-    "averageReviewRating": 4.5
+    "averageReviewRating": 4.5,
+    "posterUrl": "/Interstellar.jpg"
   },
   {
     "id": 14,
@@ -196,7 +209,8 @@
     "synopsis": "A hearing and speech-impaired man falls in love with two women...",
     "cast": ["Ranbir Kapoor", "Priyanka Chopra"],
     "reviewCount": 6,
-    "averageReviewRating": 4.2
+    "averageReviewRating": 4.2,
+    "posterUrl": "/Barfi.jpg"
   },
   {
     "id": 15,
@@ -210,7 +224,8 @@
     "synopsis": "A young man struggles to pay off his deceased father's debts...",
     "cast": ["Paul Shah", "Bipin Karki"],
     "reviewCount": 6,
-    "averageReviewRating": 4.3
+    "averageReviewRating": 4.3,
+    "posterUrl": "/Pashupati-Prasad.jpg"
   },
   {
     "id": 16,
@@ -224,7 +239,8 @@
     "synopsis": "A love story aboard the doomed RMS Titanic...",
     "cast": ["Leonardo DiCaprio", "Kate Winslet"],
     "reviewCount": 9,
-    "averageReviewRating": 4.4
+    "averageReviewRating": 4.4,
+    "posterUrl": "/Titanic.jpg"
   },
   {
     "id": 17,
@@ -238,7 +254,8 @@
     "synopsis": "A young woman embarks on a solo honeymoon trip...",
     "cast": ["Kangana Ranaut"],
     "reviewCount": 7,
-    "averageReviewRating": 4.5
+    "averageReviewRating": 4.5,
+    "posterUrl": "/Queen.jpg"
   },
   {
     "id": 18,
@@ -252,7 +269,8 @@
     "synopsis": "A story of a mysterious incident in a remote village...",
     "cast": ["Saugat Malla", "Deeya Maskey"],
     "reviewCount": 4,
-    "averageReviewRating": 4.0
+    "averageReviewRating": 4.0,
+    "posterUrl": "/Kagbeni.jpg"
   },
   {
     "id": 19,
@@ -266,7 +284,8 @@
     "synopsis": "Two imprisoned men bond over several years...",
     "cast": ["Tim Robbins", "Morgan Freeman"],
     "reviewCount": 12,
-    "averageReviewRating": 5.0
+    "averageReviewRating": 5.0,
+    "posterUrl": "/Shawshank-Redemption.jpg"
   },
   {
     "id": 20,
@@ -280,6 +299,8 @@
     "synopsis": "Villagers challenge British officers to a cricket match to avoid taxes...",
     "cast": ["Aamir Khan", "Gracy Singh"],
     "reviewCount": 6,
-    "averageReviewRating": 4.3
+    "averageReviewRating": 4.3,
+     "posterUrl": "/Lagaan.jpg"
+  
   }
 ]
