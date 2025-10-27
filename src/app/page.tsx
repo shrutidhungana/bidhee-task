@@ -18,6 +18,7 @@ import { useLogin } from "@/hooks/useLogin";
 import { useLoginStore } from "@/store/loginStore";
 import useToast from "@/hooks/useToast";
 
+
 export default function Home() {
   const router = useRouter();
   const { success, error } = useToast();
@@ -59,6 +60,8 @@ export default function Home() {
 
   const loginStore = useLoginStore();
   const loginMutation = useLogin();
+
+ 
 
   const handleAdminClick = () => {
     if (!loginStore.isLoggedIn) {
