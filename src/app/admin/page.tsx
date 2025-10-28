@@ -29,7 +29,8 @@ const Admin: React.FC = () => {
   const handleLogout = () => {
     loginStore.setLogin(false);
     success("Logged out successfully!");
-    router.push("/?page=1");
+    useFilterStore.getState().setFilter("page", 1);
+    router.push("/");
   };
 
   const page = useFilterStore((state) => state.page);
