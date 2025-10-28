@@ -61,22 +61,9 @@ const DetailPageClient: React.FC<DetailPageClientProps> = ({ movieId }) => {
     }
   };
 
-  if (isLoading)
-    return (
-      <div className="pt-24 px-4 flex justify-center">
-        <CardSkeleton />
-      </div>
-    );
-
-  if (isError || !movie)
-    return (
-      <p className="pt-24 px-4 text-red-500 text-center text-lg">
-        Movie not found.
-      </p>
-    );
-
   return (
     <div className="min-h-screen bg-gradient-to-tr from-[#F8FAFC] via-[#EBF2F7] to-[#E2E8F0]">
+      {/* Navbar always visible */}
       <Navbar title="Movie Details">
         <button
           onClick={() => router.push("/")}
@@ -87,29 +74,37 @@ const DetailPageClient: React.FC<DetailPageClientProps> = ({ movieId }) => {
       </Navbar>
 
       <main className="pt-24 px-6 space-y-10">
-        <DetailCard
-          title={movie.title}
-          subtitle={`${movie.genre.join(", ")} | ${movie.year} | ${
-            movie.language
-          }`}
-          imageUrl={movie.posterUrl}
-          director={movie.director}
-          cast={movie.cast}
-          runtime={movie.runtime}
-          synopsis={movie.synopsis}
-          reviews={reviews}
-          reviewCount={reviews.length}
-          averageRating={averageRating}
-          reviewFormProps={{
-            userName,
-            reviewText,
-            rating,
-            onUserNameChange: setUserName,
-            onReviewTextChange: setReviewText,
-            onRatingChange: setRating,
-            onSubmit: handleSubmit,
-          }}
-        />
+        {isLoading ? (
+          <div className="flex justify-center">
+            <CardSkeleton />
+          </div>
+        ) : isError || !movie ? (
+          <p className="text-red-500 text-center text-lg">Movie not found.</p>
+        ) : (
+          <DetailCard
+            title={movie.title}
+            subtitle={`${movie.genre.join(", ")} | ${movie.year} | ${
+              movie.language
+            }`}
+            imageUrl={movie.posterUrl}
+            director={movie.director}
+            cast={movie.cast}
+            runtime={movie.runtime}
+            synopsis={movie.synopsis}
+            reviews={reviews}
+            reviewCount={reviews.length}
+            averageRating={averageRating}
+            reviewFormProps={{
+              userName,
+              reviewText,
+              rating,
+              onUserNameChange: setUserName,
+              onReviewTextChange: setReviewText,
+              onRatingChange: setRating,
+              onSubmit: handleSubmit,
+            }}
+          />
+        )}
       </main>
     </div>
   );
