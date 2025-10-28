@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, ChangeEvent, useEffect } from "react";
+import React, { useState, useEffect, ChangeEvent } from "react";
 import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
 

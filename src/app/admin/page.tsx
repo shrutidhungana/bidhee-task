@@ -147,8 +147,9 @@ const Admin: React.FC = () => {
       );
     } else {
       createMovie.mutate(movieData, {
-        onSuccess: () => {
+        onSuccess: (createdMovie) => {
           success("Movie added successfully!");
+          data?.data.unshift(createdMovie);
           setDrawerOpen(false);
           setLoading(false);
         },
@@ -192,7 +193,7 @@ const Admin: React.FC = () => {
     if (!movie) return;
 
     setEditingMovieId(Number(id));
-    setPosterUrl(movie.imagerUrl || null); // 
+    setPosterUrl(movie.imageUrl || null); 
     setTitle(movie.title || "");
     setLanguage(movie.language || "");
     setGenre(movie.genre || "");
@@ -292,6 +293,7 @@ const Admin: React.FC = () => {
         onAdd={handleAddOrUpdate}
         loading={loading}
         buttonText={editingMovieId ? "Update" : "Add"}
+        isEdit={!!editingMovieId}
       />
 
       <DeleteModal

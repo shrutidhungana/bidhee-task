@@ -3,6 +3,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { FiX } from "react-icons/fi";
 import ImageUpload from "./ImageUpload";
+import Image from "next/image";
 
 interface DrawerAddMovieProps {
   isOpen: boolean;
@@ -10,6 +11,7 @@ interface DrawerAddMovieProps {
 
   posterUrl: string | null;
   onPosterChange: (file: File | null) => void;
+
   title: string;
   onTitleChange: Dispatch<SetStateAction<string>>;
   language: string;
@@ -31,7 +33,9 @@ interface DrawerAddMovieProps {
 
   onAdd: () => void;
   loading?: boolean;
-  buttonText?: string; // <-- New prop
+  buttonText?: string;
+
+  isEdit?: boolean; // new prop
 }
 
 const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
@@ -59,7 +63,8 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
   onCastChange,
   onAdd,
   loading = false,
-  buttonText = "Add", 
+  buttonText = "Add",
+  isEdit = false,
 }) => {
   return (
     <div
@@ -67,17 +72,14 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      
       {isOpen && (
         <div className="absolute inset-0 bg-black/30" onClick={onClose}></div>
       )}
 
-      
       <div
         className="relative h-full bg-white shadow-xl overflow-y-auto p-6 flex flex-col gap-4
                       w-full sm:w-3/4 md:w-1/2 lg:w-96 transition-transform duration-300"
       >
-      
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-purple-700">
             {buttonText} Movie
@@ -90,104 +92,64 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           </button>
         </div>
 
-      
+        {/* Poster */}
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Poster</label>
-          <ImageUpload
-            value={posterUrl || ""}
-            onChange={(file, base64) => {
-              onPosterChange(base64 || null); // store Base64 directly
-            }}
-          />
+          {isEdit ? (
+            posterUrl && (
+              <div className="w-40 h-60 relative border-2 border-gray-300 rounded-lg overflow-hidden flex items-center justify-center bg-gray-50">
+                <Image
+                  src={posterUrl}
+                  alt="Poster"
+                  fill
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            )
+          ) : (
+            <ImageUpload
+              value={posterUrl || ""}
+              onChange={(file, base64) => onPosterChange(base64 || null)}
+            />
+          )}
         </div>
+
+        
+        {[
+          { label: "Title", value: title, onChange: onTitleChange },
+          { label: "Language", value: language, onChange: onLanguageChange },
+          {
+            label: "Genre (comma separated)",
+            value: genre,
+            onChange: onGenreChange,
+          },
+          { label: "Year", value: year, onChange: onYearChange },
+          { label: "Rating (0-5)", value: rating, onChange: onRatingChange },
+          { label: "Director", value: director, onChange: onDirectorChange },
+          {
+            label: "Runtime (minutes)",
+            value: runtime,
+            onChange: onRuntimeChange,
+          },
+          {
+            label: "Cast (comma separated)",
+            value: cast,
+            onChange: onCastChange,
+          },
+        ].map((field) => (
+          <div key={field.label} className="flex flex-col gap-1">
+            <label className="font-semibold text-gray-700">{field.label}</label>
+            <input
+              type="text"
+              placeholder={field.label}
+              value={field.value}
+              onChange={(e) => field.onChange(e.target.value)}
+              className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
+            />
+          </div>
+        ))}
 
       
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Title</label>
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => onTitleChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-       
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Language</label>
-          <input
-            type="text"
-            placeholder="Language"
-            value={language}
-            onChange={(e) => onLanguageChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-       
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Genre</label>
-          <input
-            type="text"
-            placeholder="Genre (comma separated)"
-            value={genre}
-            onChange={(e) => onGenreChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-       
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Year</label>
-          <input
-            type="text"
-            placeholder="Year"
-            value={year}
-            onChange={(e) => onYearChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-       
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Rating</label>
-          <input
-            type="text"
-            placeholder="Rating (0-5)"
-            value={rating}
-            onChange={(e) => onRatingChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-        {/* Director */}
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Director</label>
-          <input
-            type="text"
-            placeholder="Director"
-            value={director}
-            onChange={(e) => onDirectorChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-       
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">
-            Runtime (minutes)
-          </label>
-          <input
-            type="text"
-            placeholder="Runtime"
-            value={runtime}
-            onChange={(e) => onRuntimeChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Synopsis</label>
           <textarea
@@ -199,18 +161,6 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label className="font-semibold text-gray-700">Cast</label>
-          <input
-            type="text"
-            placeholder="Cast (comma separated)"
-            value={cast}
-            onChange={(e) => onCastChange(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-        </div>
-
-        
         <button
           onClick={onAdd}
           disabled={loading}
