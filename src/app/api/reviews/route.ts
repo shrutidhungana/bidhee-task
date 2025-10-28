@@ -11,12 +11,12 @@ interface Review {
   createdAt: string;
 }
 
-
+// Writable file in Vercel serverless
 const tempReviewsFile = path.join("/tmp", "reviews.json");
-
+// Original read-only JSON file
 const originalReviewsFile = path.join(process.cwd(), "reviews.json");
 
-
+// Initialize /tmp/reviews.json if it doesn't exist
 async function initTempReviewsFile() {
   try {
     await fs.access(tempReviewsFile);
@@ -55,6 +55,54 @@ export async function GET(req: NextRequest) {
     console.error(err);
     return NextResponse.json(
       { message: "Failed to fetch reviews" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    await initTempReviewsFile();
+
+    const body = await req.json();
+    const requiredFields = ["movieId", "userName", "rating", "reviewText"];
+
+    for (const field of requiredFields) {
+      if (!(field in body)) {
+        return NextResponse.json(
+          { message: `Missing field: ${field}` },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (typeof body.rating !== "number" || body.rating < 1 || body.rating > 5) {
+      return NextResponse.json(
+        { message: "Rating must be a number between 1 and 5" },
+        { status: 400 }
+      );
+    }
+
+    const data = await fs.readFile(tempReviewsFile, "utf-8");
+    const reviews: Review[] = JSON.parse(data);
+
+    const newReview: Review = {
+      id: reviews.length ? Math.max(...reviews.map((r) => r.id)) + 1 : 1,
+      movieId: body.movieId,
+      userName: body.userName,
+      rating: body.rating,
+      reviewText: body.reviewText,
+      createdAt: new Date().toISOString(),
+    };
+
+    reviews.push(newReview);
+    await fs.writeFile(tempReviewsFile, JSON.stringify(reviews, null, 2));
+
+    return NextResponse.json(newReview, { status: 201 });
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json(
+      { message: "Failed to create review" },
       { status: 500 }
     );
   }

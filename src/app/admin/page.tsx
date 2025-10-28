@@ -192,7 +192,7 @@ const Admin: React.FC = () => {
     if (!movie) return;
 
     setEditingMovieId(Number(id));
-    setPosterUrl(movie.posterUrl || null); // show existing Base64 image
+    setPosterUrl(movie.imagerUrl || null); // 
     setTitle(movie.title || "");
     setLanguage(movie.language || "");
     setGenre(movie.genre || "");
