@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## Movie-App
 
-## Getting Started
+This is a full stack Next App made with **Next**, **Typescript**, **Tailwind** for styling, **React-Query** and **Zustand** for data fetching and state management respectively.
 
-First, run the development server:
+To run the application in your local computer:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Clone the repository from the github.
+- Install all the required package using npm install.
+- Run npm run dev to go inside localhost.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**Features of the application**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**_Dashboard page:_**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Once, you get inside application you will see movie dashboard with movie cards having posters, title, genre, year, rating and view details button.
+- In the Navbar you can see title as well as Searchbar to search for required movie and login for admin to get inside Admin Panel.
+- In the sidebar there is filter and sorting dropdown. You can filter by Genre (Action, Drama,Comedy,Sci-Fi, Horror, Romance, Thriller, Biographical, Adventure) and Language (Nepali, English, Hindi).
+- Sorting can be done by Title-A-Z, Title-Z-A, Rating-High-Low, Rating-Low-High, Year-New-Old, Year-Old-New
 
-## Learn More
+***View Details Page***
 
-To learn more about Next.js, take a look at the following resources:
+- On clicking the card or view details button you are redirected to view details page.
+- Here you can see the details of specific movie including Director, Runtime, Cast, Synopsis and title, genre, language, year which were already in Dashboard page.
+- There is review count and average rating of the movie and you can also check the reviews of the movie by different people which is scrollable.
+- Also, there is section to write and submit your review of the movie.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+***Login Modal***
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- On clicking Login button in the Dashboard page, a login model opens where admin enters username and password.
+- Then on clicking login, you are redirected to Admin Panel.
 
-## Deploy on Vercel
+***Admin Panel***
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- On Admin Panel, there is a table which display the list of all the  movies that are present with edit and delete icon.
+- On Navbar, there is title and Logout button to go back to the dashboard.
+- Below Navbar, there is Welcome, Admin and the right Add button and Export to CSV.
+- On clicking, export to CSV all the data are exported to CSV.
+- On, clicking Add button, a drawer opens, where you (Admin)  can add all the required fields of New movie (Poster, Title, Language, Genre, Year, Rating, Director, Runtime, Cast and Synopsis). 
+- On clicking delete icon, a modal will open asking you if you surely want to Delete the movie. On clicking confirm, it will delete the movie or else clicking cancel will close modal.
+- On clicking edit icon, drawer will open to update anything about particular movie except the movie poster.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To know further about the app you can click on link below: 
+
+https://bidhee-task.vercel.app/

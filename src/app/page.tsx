@@ -119,6 +119,9 @@ export default function Home() {
                 "Sci-Fi",
                 "Horror",
                 "Romance",
+                "Thriller",
+                "Biographical",
+                "Adventure",
               ].map((g) => ({ value: g, label: g }))}
               label="Genre"
             />
