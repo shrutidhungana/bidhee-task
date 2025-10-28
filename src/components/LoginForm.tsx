@@ -10,7 +10,7 @@ interface LoginFormProps {
   onLogin: () => void;
   loading?: boolean;
   errorMessage?: string;
-  onClose: () => void; 
+  onClose: () => void;
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({
@@ -25,39 +25,46 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={onClose} // close when clicking outside modal
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm"
+      onClick={onClose}
     >
       <div
         className="w-full max-w-md p-10 bg-white rounded-3xl shadow-2xl flex flex-col gap-6"
-        onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside modal
+        onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-3xl font-extrabold text-center text-purple-700">
           Admin Login
         </h2>
 
         {errorMessage && (
-          <p className="text-red-500 text-sm text-center font-medium">
+          <p className="text-red-600 text-sm text-center font-medium">
             {errorMessage}
           </p>
         )}
 
         <div className="flex flex-col gap-4">
+          <label className="text-gray-700 font-medium">Username</label>
           <input
             type="text"
             value={username}
             onChange={(e) => onUsernameChange(e.target.value)}
-            placeholder="Username"
-            className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-400 transition duration-300 placeholder-gray-400"
+            placeholder="Enter your username"
+            className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent placeholder-gray-400 text-gray-800 transition duration-300"
           />
 
+          <label className="text-gray-700 font-medium mt-2">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
-            placeholder="Password"
-            className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-400 transition duration-300 placeholder-gray-400"
+            placeholder="Enter your password"
+            className="border border-gray-300 rounded-xl px-4 py-3 w-full focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent placeholder-gray-400 text-gray-800 transition duration-300"
           />
+        </div>
+
+        <div className="flex items-center justify-center  my-4">
+          <span className="flex-grow h-px bg-gray-300"></span>
+          <span className="flex-grow h-px bg-gray-300"></span>
         </div>
 
         <button
