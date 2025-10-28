@@ -9,7 +9,7 @@ interface CardProps {
   subtitle?: string;
   rating?: number;
   year?: number;
-  imageUrl?: string; // Add poster URL
+  imageUrl?: string; 
   onClick?: () => void;
   onButtonClick?: () => void;
   buttonText: string;

@@ -16,7 +16,7 @@ export const useExportMovies = () => {
       const blob = await res.blob();
       const url = window.URL.createObjectURL(blob);
 
-      // Trigger download
+      
       const a = document.createElement("a");
       a.href = url;
       a.download = "movies.csv";

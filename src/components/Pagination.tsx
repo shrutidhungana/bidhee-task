@@ -17,7 +17,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div className="flex flex-wrap justify-center items-center gap-2 md:gap-3 mt-2 md:mt-0">
-      {/* Previous Button */}
+     
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
@@ -26,7 +26,7 @@ const Pagination: React.FC<PaginationProps> = ({
         Prev
       </button>
 
-      {/* Page Numbers */}
+      
       {pages.map((page) => (
         <button
           key={page}
@@ -41,7 +41,7 @@ const Pagination: React.FC<PaginationProps> = ({
         </button>
       ))}
 
-      {/* Next Button */}
+     
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}

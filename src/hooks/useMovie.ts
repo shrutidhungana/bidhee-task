@@ -23,7 +23,7 @@ export interface MovieDetail {
   averageReviewRating: number;
 }
 
-// Fetch single movie
+
 export const useMovie = (
   id: string | number,
   options?: UseQueryOptions<MovieDetail, Error, MovieDetail>
@@ -40,7 +40,7 @@ export const useMovie = (
   });
 };
 
-// Update single movie
+
 export const useUpdateMovieDetail = () => {
   const queryClient = useQueryClient();
   return useMutation({

@@ -59,7 +59,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
   onCastChange,
   onAdd,
   loading = false,
-  buttonText = "Add", // default to Add
+  buttonText = "Add", 
 }) => {
   return (
     <div
@@ -67,17 +67,17 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
         isOpen ? "translate-x-0" : "translate-x-full"
       }`}
     >
-      {/* Overlay */}
+      
       {isOpen && (
         <div className="absolute inset-0 bg-black/30" onClick={onClose}></div>
       )}
 
-      {/* Drawer */}
+      
       <div
         className="relative h-full bg-white shadow-xl overflow-y-auto p-6 flex flex-col gap-4
                       w-full sm:w-3/4 md:w-1/2 lg:w-96 transition-transform duration-300"
       >
-        {/* Header */}
+      
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-2xl font-bold text-purple-700">
             {buttonText} Movie
@@ -90,7 +90,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           </button>
         </div>
 
-        {/* Poster */}
+      
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Poster</label>
           <ImageUpload
@@ -101,7 +101,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Title */}
+      
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Title</label>
           <input
@@ -113,7 +113,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Language */}
+       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Language</label>
           <input
@@ -125,7 +125,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Genre */}
+       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Genre</label>
           <input
@@ -137,7 +137,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Year */}
+       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Year</label>
           <input
@@ -149,7 +149,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Rating */}
+       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Rating</label>
           <input
@@ -173,7 +173,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Runtime */}
+       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">
             Runtime (minutes)
@@ -187,7 +187,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Synopsis */}
+       
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Synopsis</label>
           <textarea
@@ -199,7 +199,6 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Cast */}
         <div className="flex flex-col gap-1">
           <label className="font-semibold text-gray-700">Cast</label>
           <input
@@ -211,7 +210,7 @@ const DrawerAddMovie: React.FC<DrawerAddMovieProps> = ({
           />
         </div>
 
-        {/* Add/Update Button */}
+        
         <button
           onClick={onAdd}
           disabled={loading}

@@ -7,9 +7,8 @@ interface DetailPageProps {
   };
 }
 
-// Server Component wrapper
 const DetailPage = ({ params }: DetailPageProps) => {
-  // params are resolved in server components
+  
   return <DetailPageClient movieId={Number(params.id)} />;
 };
 

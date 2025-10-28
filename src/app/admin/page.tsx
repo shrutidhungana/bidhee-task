@@ -108,7 +108,6 @@ const Admin: React.FC = () => {
     setDrawerOpen(true);
   };
 
-  // Add or update movie
   const handleAddOrUpdate = () => {
     if (!title || !language) {
       toastError("Title and Language are required");
@@ -187,7 +186,7 @@ const Admin: React.FC = () => {
     });
   };
 
-  // Edit movie
+  
   const handleEditClick = (id: number | string) => {
     const movie = tableData.find((m) => m.id === id);
     if (!movie) return;

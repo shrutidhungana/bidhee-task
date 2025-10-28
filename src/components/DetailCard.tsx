@@ -50,9 +50,9 @@ const DetailCard: React.FC<DetailCardProps> = ({
 }) => {
   return (
     <div className="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-6 md:p-10 flex flex-col gap-8 transform transition-all duration-500 hover:scale-[1.01]">
-      {/* Top Section: Movie Info */}
+     
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Left Image */}
+       
         {imageUrl && (
           <div className="flex-shrink-0 w-full md:w-1/3">
             <img
@@ -67,9 +67,9 @@ const DetailCard: React.FC<DetailCardProps> = ({
           </div>
         )}
 
-        {/* Right Details */}
+        
         <div className="flex-1 flex flex-col gap-4 text-gray-700">
-          {/* Basic Info */}
+         
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             <div>
               <h3 className="font-semibold">Director</h3>
@@ -85,7 +85,7 @@ const DetailCard: React.FC<DetailCardProps> = ({
             </div>
           </div>
 
-          {/* Synopsis */}
+          
           <div className="mt-4">
             <h3 className="font-semibold text-lg text-gray-700">Synopsis</h3>
             <p className="text-gray-800">{synopsis}</p>
@@ -93,14 +93,14 @@ const DetailCard: React.FC<DetailCardProps> = ({
         </div>
       </div>
 
-      {/* Reviews Section */}
+     
       <ReviewList
         reviewCount={reviewCount}
         averageRating={averageRating}
         reviews={reviews}
       />
 
-      {/* Review Form */}
+      
       {reviewFormProps && <ReviewForm {...reviewFormProps} />}
     </div>
   );

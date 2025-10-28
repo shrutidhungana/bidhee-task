@@ -17,10 +17,10 @@ const Navbar: React.FC<NavbarProps> = ({ title, children }) => {
     <header className="bg-gradient-to-r from-pink-700 via-purple-700 to-indigo-800 text-white shadow-md fixed w-full z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* Title */}
+        
           <div className="flex-shrink-0 text-2xl font-bold">{title}</div>
 
-          {/* Desktop Content */}
+          
           <div className="hidden md:flex items-center space-x-4">
             {children}
           </div>

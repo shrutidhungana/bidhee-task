@@ -51,10 +51,10 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         />
       </div>
 
-      {/* Submit Button */}
+    
       <button
         type="submit"
-        className="self-start bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition"
+        className="self-start bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 transition"
       >
         Submit Review
       </button>

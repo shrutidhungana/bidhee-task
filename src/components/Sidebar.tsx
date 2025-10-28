@@ -23,7 +23,7 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   return (
     <>
-      {/* Desktop Sidebar */}
+      
       <div
         className={clsx(
           "hidden md:flex flex-col flex-shrink-0",
@@ -40,7 +40,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         <div className="flex-1 flex flex-col gap-4">{children}</div>
       </div>
 
-      {/* Mobile Sidebar */}
+   
       <div
         className={clsx(
           "flex md:hidden flex-col w-full p-4 mb-4",

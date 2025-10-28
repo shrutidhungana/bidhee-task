@@ -7,7 +7,7 @@ import { FaStar } from "react-icons/fa";
 interface StarRatingSelectorProps {
   rating: number;
   onChange: (value: number) => void;
-  size?: number; // optional star size
+  size?: number; 
 }
 
 const StarRatingSelector: React.FC<StarRatingSelectorProps> = ({

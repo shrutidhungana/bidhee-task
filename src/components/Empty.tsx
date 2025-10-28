@@ -74,7 +74,7 @@ const Empty: React.FC<EmptyProps> = ({
     );
   }
 
-  // Fallback to card if variant is unknown
+ 
   return (
     <div className="bg-white border border-gray-200 rounded-lg shadow-md p-6">
       {content}

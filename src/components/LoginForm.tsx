@@ -10,7 +10,7 @@ interface LoginFormProps {
   onLogin: () => void;
   loading?: boolean;
   errorMessage?: string;
-  onClose: () => void; // <-- added
+  onClose: () => void; 
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({

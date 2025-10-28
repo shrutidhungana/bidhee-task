@@ -26,7 +26,7 @@ export const useReviews = (movieId: number) => {
     enabled: !!movieId,
   });
 
-  // Mutation for posting a new review
+  
   const addReviewMutation = useMutation({
     mutationFn: async (newReview: Omit<Review, "id" | "createdAt">) => {
       const res = await fetch("/api/reviews", {

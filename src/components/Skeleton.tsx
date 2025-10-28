@@ -1,4 +1,4 @@
-// Skeleton.tsx
+
 import React from "react";
 
 export const CardSkeleton = () => {

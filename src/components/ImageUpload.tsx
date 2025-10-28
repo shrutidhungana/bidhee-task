@@ -5,7 +5,7 @@ import Image from "next/image";
 import { FiUpload } from "react-icons/fi";
 
 interface ImageUploadProps {
-  value?: string; // Base64 string
+  value?: string;
   onChange: (file: File | null, base64?: string) => void;
 }
 

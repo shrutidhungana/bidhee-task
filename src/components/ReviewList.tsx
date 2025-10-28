@@ -22,7 +22,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
   averageRating,
   reviews,
 }) => {
-  // Renders stars for both average and per-review ratings
+ 
   const renderStars = (rating: number) => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -51,7 +51,7 @@ const ReviewList: React.FC<ReviewListProps> = ({
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+     
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-800">Reviews</h2>

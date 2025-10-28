@@ -18,14 +18,27 @@ interface Movie {
   averageReviewRating: number;
 }
 
-const moviesFile = path.join(process.cwd(), "movies.json");
+const tempMoviesFile = path.join("/tmp", "movies.json");
+
+const originalMoviesFile = path.join(process.cwd(), "movies.json");
+
+
+async function initTempMoviesFile() {
+  try {
+    await fs.access(tempMoviesFile);
+  } catch {
+    const data = await fs.readFile(originalMoviesFile, "utf-8");
+    await fs.writeFile(tempMoviesFile, data);
+  }
+}
 
 export async function GET(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const data = await fs.readFile(moviesFile, "utf-8");
+    await initTempMoviesFile();
+    const data = await fs.readFile(tempMoviesFile, "utf-8");
     const movies: Movie[] = JSON.parse(data);
 
     const movieId = parseInt(params.id);
@@ -55,17 +68,18 @@ export async function PUT(
   }
 
   try {
+    await initTempMoviesFile();
     const movieId = parseInt(params.id);
     const body = await req.json();
 
-    const data = await fs.readFile(moviesFile, "utf-8");
+    const data = await fs.readFile(tempMoviesFile, "utf-8");
     const movies: Movie[] = JSON.parse(data);
     const index = movies.findIndex((m) => m.id === movieId);
     if (index === -1)
       return NextResponse.json({ message: "Movie not found" }, { status: 404 });
 
     movies[index] = { ...movies[index], ...body };
-    await fs.writeFile(moviesFile, JSON.stringify(movies, null, 2));
+    await fs.writeFile(tempMoviesFile, JSON.stringify(movies, null, 2));
     return NextResponse.json(movies[index]);
   } catch (err) {
     return NextResponse.json(
@@ -86,15 +100,16 @@ export async function DELETE(
   }
 
   try {
+    await initTempMoviesFile();
     const movieId = parseInt(params.id);
-    const data = await fs.readFile(moviesFile, "utf-8");
+    const data = await fs.readFile(tempMoviesFile, "utf-8");
     let movies: Movie[] = JSON.parse(data);
     const index = movies.findIndex((m) => m.id === movieId);
     if (index === -1)
       return NextResponse.json({ message: "Movie not found" }, { status: 404 });
 
     const deleted = movies.splice(index, 1)[0];
-    await fs.writeFile(moviesFile, JSON.stringify(movies, null, 2));
+    await fs.writeFile(tempMoviesFile, JSON.stringify(movies, null, 2));
     return NextResponse.json(deleted);
   } catch (err) {
     return NextResponse.json(
@@ -103,4 +118,3 @@ export async function DELETE(
     );
   }
 }
-

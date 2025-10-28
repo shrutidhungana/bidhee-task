@@ -19,7 +19,19 @@ interface Movie {
   averageReviewRating: number;
 }
 
-const moviesFile = path.join(process.cwd(), "movies.json");
+const tempMoviesFile = path.join("/tmp", "movies.json");
+
+const originalMoviesFile = path.join(process.cwd(), "movies.json");
+
+
+async function initTempMoviesFile() {
+  try {
+    await fs.access(tempMoviesFile);
+  } catch {
+    const data = await fs.readFile(originalMoviesFile, "utf-8");
+    await fs.writeFile(tempMoviesFile, data);
+  }
+}
 
 export async function GET(req: NextRequest) {
   const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD;
@@ -30,7 +42,8 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const data = await fs.readFile(moviesFile, "utf-8");
+    await initTempMoviesFile();
+    const data = await fs.readFile(tempMoviesFile, "utf-8");
     const movies: Movie[] = JSON.parse(data);
 
     const records = movies.map((m) => ({
@@ -59,6 +72,7 @@ export async function GET(req: NextRequest) {
       },
     });
   } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Failed to export CSV" },
       { status: 500 }

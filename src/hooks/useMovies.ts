@@ -38,7 +38,7 @@ interface MoviesResponse {
   total: number;
 }
 
-// Fetch movies
+
 export const useMovies = (params: QueryParams) => {
   const queryKey: [
     string,
@@ -88,7 +88,7 @@ export const useMovies = (params: QueryParams) => {
   return useQuery(options);
 };
 
-// Create movie
+
 export const useCreateMovie = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -108,7 +108,7 @@ export const useCreateMovie = () => {
   });
 };
 
-// Update movie
+
 export const useUpdateMovie = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -128,7 +128,7 @@ export const useUpdateMovie = () => {
   });
 };
 
-// Delete movie
+
 export const useDeleteMovie = () => {
   const queryClient = useQueryClient();
   return useMutation({
