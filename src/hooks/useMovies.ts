@@ -19,8 +19,6 @@ export interface Movie {
   director: string;
   synopsis: string;
   runtime: number;
-
-
 }
 
 interface QueryParams {
@@ -37,7 +35,6 @@ interface MoviesResponse {
   data: Movie[];
   total: number;
 }
-
 
 export const useMovies = (params: QueryParams) => {
   const queryKey: [
@@ -79,7 +76,10 @@ export const useMovies = (params: QueryParams) => {
       }).toString();
 
       const res = await fetch(`/api/movies?${query}`);
-      if (!res.ok) throw new Error("Failed to fetch movies");
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to fetch movies");
+      }
       return res.json();
     },
     staleTime: 1000 * 60 * 5,
@@ -87,7 +87,6 @@ export const useMovies = (params: QueryParams) => {
 
   return useQuery(options);
 };
-
 
 export const useCreateMovie = () => {
   const queryClient = useQueryClient();
@@ -101,13 +100,13 @@ export const useCreateMovie = () => {
         },
         body: JSON.stringify(movie),
       });
-      if (!res.ok) throw new Error("Failed to create movie");
-      return res.json();
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to create movie");
+      return data;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["movies"] }),
   });
 };
-
 
 export const useUpdateMovie = () => {
   const queryClient = useQueryClient();
@@ -121,13 +120,13 @@ export const useUpdateMovie = () => {
         },
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed to update movie");
-      return res.json();
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message || "Failed to update movie");
+      return result;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["movies"] }),
   });
 };
-
 
 export const useDeleteMovie = () => {
   const queryClient = useQueryClient();
@@ -139,8 +138,9 @@ export const useDeleteMovie = () => {
           "x-admin-password": process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "",
         },
       });
-      if (!res.ok) throw new Error("Failed to delete movie");
-      return res.json();
+      const result = await res.json();
+      if (!res.ok) throw new Error(result.message || "Failed to delete movie");
+      return result;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["movies"] }),
   });

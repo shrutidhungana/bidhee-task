@@ -32,7 +32,6 @@ const Admin: React.FC = () => {
     router.push("/?page=1");
   };
 
-  // Pagination & Filters
   const page = useFilterStore((state) => state.page);
   const limit = useFilterStore((state) => state.limit);
   const setFilter = useFilterStore((state) => state.setFilter);
@@ -52,7 +51,7 @@ const Admin: React.FC = () => {
   const tableData: TableRow[] =
     data?.data.map((movie) => ({
       id: movie.id,
-      imageUrl: movie.posterUrl, // now Base64 from backend
+      imageUrl: movie.posterUrl,
       title: movie.title,
       genre: movie.genre.join(", "),
       year: movie.year?.toString() || "",
@@ -72,9 +71,8 @@ const Admin: React.FC = () => {
     { key: "language", label: "Language" },
   ];
 
-  // Drawer States
   const [isDrawerOpen, setDrawerOpen] = useState(false);
-  const [posterUrl, setPosterUrl] = useState<string | null>(null); // store Base64
+  const [posterUrl, setPosterUrl] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [language, setLanguage] = useState("");
   const [genre, setGenre] = useState("");
@@ -92,7 +90,6 @@ const Admin: React.FC = () => {
   const deleteMovieMutation = useDeleteMovie();
   const exportMutation = useExportMovies();
 
-  // Open drawer for adding a movie
   const openAddDrawer = () => {
     setEditingMovieId(null);
     setPosterUrl(null);
@@ -126,7 +123,7 @@ const Admin: React.FC = () => {
       runtime,
       synopsis,
       cast: cast.split(",").map((c) => c.trim()),
-      posterUrl: posterUrl || "", // Base64
+      posterUrl: posterUrl || "",
     };
 
     if (editingMovieId) {
@@ -141,6 +138,7 @@ const Admin: React.FC = () => {
           },
           onError: (err: any) => {
             toastError(err.message || "Failed to update movie");
+             setDrawerOpen(false);
             setLoading(false);
           },
         }
@@ -155,13 +153,13 @@ const Admin: React.FC = () => {
         },
         onError: (err: any) => {
           toastError(err.message || "Failed to add movie");
+           setDrawerOpen(false);
           setLoading(false);
         },
       });
     }
   };
 
-  // Delete Modal
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [movieToDelete, setMovieToDelete] = useState<TableRow | null>(null);
 
@@ -178,6 +176,7 @@ const Admin: React.FC = () => {
         success(`Movie "${movieToDelete.title}" deleted successfully!`);
         setDeleteModalOpen(false);
         setMovieToDelete(null);
+        setFilter("page", 1);
       },
       onError: (err: any) => {
         toastError(err.message || "Failed to delete movie");
@@ -187,13 +186,12 @@ const Admin: React.FC = () => {
     });
   };
 
-  
   const handleEditClick = (id: number | string) => {
     const movie = tableData.find((m) => m.id === id);
     if (!movie) return;
 
     setEditingMovieId(Number(id));
-    setPosterUrl(movie.imageUrl || null); 
+    setPosterUrl(movie.imageUrl || null);
     setTitle(movie.title || "");
     setLanguage(movie.language || "");
     setGenre(movie.genre || "");
