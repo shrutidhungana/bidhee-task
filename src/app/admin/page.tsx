@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import Pagination from "@/components/Pagination";
@@ -32,6 +32,12 @@ const Admin: React.FC = () => {
     useFilterStore.getState().setFilter("page", 1);
     router.push("/");
   };
+
+  useEffect(() => {
+    if (!loginStore.isLoggedIn) {
+      router.push("/"); 
+    }
+  }, [loginStore.isLoggedIn, router]);
 
   const page = useFilterStore((state) => state.page);
   const limit = useFilterStore((state) => state.limit);

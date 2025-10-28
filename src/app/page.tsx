@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import SearchBar from "@/components/Searchbar";
@@ -85,6 +85,10 @@ export default function Home() {
       error(err.message);
     }
   };
+
+
+
+ 
 
   return (
     <div className="min-h-screen bg-gray-100">
