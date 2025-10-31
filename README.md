@@ -41,4 +41,4 @@ To run the application in your local computer:
 
 To know further about the app you can click on link below: 
 
-https://bidhee-task.vercel.app/
+https://movie-app-theta-lovat.vercel.app
